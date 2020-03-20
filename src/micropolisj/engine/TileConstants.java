@@ -382,7 +382,7 @@ public class TileConstants
 	{
 		assert (tile & LOMASK) == tile;
 
-		return tile >= FIRSTRIVEDGE && tile <= LASTRIVEDGE;
+		return tile >= FIRSTRIVEDGE && tile <= LASTRIVEDGE; // Bug fixed,flood would start in forest
 	}
 
 	public static boolean isDozeable(int tile)
