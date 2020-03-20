@@ -210,6 +210,7 @@ class MapScanner extends TileBehavior
 		city.fireStationCount++;
 		if ((city.cityTime % 8) == 0) {
 			repairZone(FIRESTATION, 3);
+			//Bug fixed,Fire Station wouldn't mess up and turns into Police Station
 		}
 
 		int z;
