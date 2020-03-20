@@ -363,7 +363,7 @@ class RoadLikeTool extends ToolStroke
 		case REDGE:
 		case CHANNEL:
 
-			cost = UNDERWATER_WIRE_COST;
+			cost = UNDERWATER_WIRE_COST; // Bug fixed,underwater wires costs
 
 			// check east
 			{
