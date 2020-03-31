@@ -1010,3 +1010,13 @@
 957   misc_animation@0,2080
 958   misc_animation@0,2096
 959   misc_animation@0,2112
+# BEGIN CINEMA #
+960   cinema@0,0         (conducts)
+961   cinema@16,0        (conducts)
+962   cinema@32,0        (conducts)
+963   cinema@0,16        (conducts)
+964   cinema@16,16 (zone)(conducts)(building=3x3)(behavior=FIRESTATION)(description=#16)
+965   cinema@32,16       (conducts)
+966   cinema@0,32        (conducts)
+967   cinema@16,32       (conducts)
+968   cinema@32,32       (conducts)

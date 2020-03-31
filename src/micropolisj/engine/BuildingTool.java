@@ -51,6 +51,10 @@ class BuildingTool extends ToolStroke
 
 		case AIRPORT:
 			return applyZone(eff, AIRPORT);
+			
+		case CINEMA:
+			return applyZone(eff, CINEMA);
+			//return applyZone(eff, CINEMA_ID); !! make the right icon
 
 		default:
 			// not expected
