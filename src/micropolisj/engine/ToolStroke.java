@@ -10,7 +10,7 @@ package micropolisj.engine;
 
 import static micropolisj.engine.TileConstants.*;
 
-public class ToolStroke
+public class ToolStroke<fireStationCount>
 {
 	final Micropolis city;
 	final MicropolisTool tool;
@@ -126,6 +126,7 @@ public class ToolStroke
 	}
 
 	boolean applyZone(ToolEffectIfc eff, int base)
+		
 	{
 		assert isZoneCenter(base);
 
@@ -133,9 +134,11 @@ public class ToolStroke
 		if (bi == null) {
 			throw new Error("Cannot applyZone to #"+base);
 		}
-
 		int cost = tool.getToolCost();
+				
 		boolean canBuild = true;
+		
+				
 		for (int rowNum = 0; rowNum < bi.height; rowNum++) {
 			for (int columnNum = 0; columnNum < bi.width; columnNum++)
 			{

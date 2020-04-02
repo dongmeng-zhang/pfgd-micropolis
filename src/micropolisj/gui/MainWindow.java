@@ -1038,10 +1038,7 @@ public class MainWindow extends JFrame
 		Box b5 = new Box(BoxLayout.X_AXIS);
 		gridBox.add(b5,c);
 
-		b5.add(makeToolBtn(MicropolisTool.CINEMA));// for CINEMA
-		b5.add(makeToolBtn(MicropolisTool.NUCLEAR));// for the new buildings
-		b5.add(makeToolBtn(MicropolisTool.NUCLEAR));// for the new buildings
-		
+		b5.add(makeToolBtn(MicropolisTool.MUSEUM));// for MUSEUM		
 
 		c.gridy++;
 		Box b6 = new Box(BoxLayout.X_AXIS);

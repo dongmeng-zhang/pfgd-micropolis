@@ -30,7 +30,7 @@ public enum MicropolisTool
 	NUCLEAR(4, 5000),
 	AIRPORT(6, 10000),
 	QUERY(1, 0),
-	CINEMA(4, 1000); // cinema blank to be made
+	MUSEUM(3, 1000); // MUSEUM blank to be made
 
 	int size;
 	int cost;
@@ -69,7 +69,7 @@ public enum MicropolisTool
 		case POWERPLANT:
 		case NUCLEAR:
 		case AIRPORT:
-		case CINEMA:
+		case MUSEUM:
 			return new BuildingTool(engine, this, xpos, ypos);
 
 		default:

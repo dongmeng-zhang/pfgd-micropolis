@@ -41,7 +41,8 @@ class MapScanner extends TileBehavior
 		STADIUM_EMPTY,
 		STADIUM_FULL,
 		AIRPORT,
-		SEAPORT;
+		SEAPORT,
+		MUSEUM; // Add museum
 	}
 
 	@Override
@@ -84,6 +85,10 @@ class MapScanner extends TileBehavior
 		case SEAPORT:
 			doSeaport();
 			return;
+		case MUSEUM:
+			doMuseum(); // museum
+			return;
+			
 		default:
 			assert false;
 		}
@@ -252,6 +257,19 @@ class MapScanner extends TileBehavior
 
 		city.policeMap[ypos/8][xpos/8] += z;
 	}
+	
+	void doMuseum() //check for power and do repair
+	{
+	  boolean powerOn = checkZonePower();
+	  if ((city.cityTime % 8) == 0) {
+		  repairZone(MUSEUM,3);
+	  }
+		
+	}
+	
+	
+	
+	
 
 	void doStadiumEmpty()
 	{
