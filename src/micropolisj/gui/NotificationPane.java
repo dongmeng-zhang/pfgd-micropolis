@@ -120,6 +120,8 @@ public class NotificationPane extends JPanel
 		String crimeLevelStr = s_strings.getString("status."+zone.crimeLevel);
 		String pollutionStr = s_strings.getString("status."+zone.pollution);
 		String growthRateStr = s_strings.getString("status."+zone.growthRate);
+		String educationCoverageStr = s_strings.getString("status."+zone.educationCoverage);
+		
 
 		setPicture(engine, xpos, ypos);
 
@@ -157,6 +159,10 @@ public class NotificationPane extends JPanel
 		c1.gridy = ++c2.gridy;
 		p.add(new JLabel(strings.getString("notification.crime_lbl")), c1);
 		p.add(new JLabel(crimeLevelStr), c2);
+		
+		c1.gridy = ++c2.gridy;
+		p.add(new JLabel(strings.getString("notification.education_lbl")), c1);
+		p.add(new JLabel(educationCoverageStr), c2);
 
 		c1.gridy = ++c2.gridy;
 		p.add(new JLabel(strings.getString("notification.pollution_lbl")), c1);

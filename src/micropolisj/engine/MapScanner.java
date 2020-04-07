@@ -272,7 +272,7 @@ class MapScanner extends TileBehavior
 	{
 	  boolean powerOn = checkZonePower();
 	  
-	  city.museumCount++; // bug to fix
+	
 	  
 	  if ((city.cityTime % 8) == 0) {
 		  repairZone(MUSEUM,3);

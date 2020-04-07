@@ -90,6 +90,7 @@ public class Micropolis
 	/** For each 8x8 section of city, this is an integer between 0 and 64,
 	 * with higher numbers being closer to the center of the city. */
 	int [][] comRate;
+	public int [][]museumMap;  // add museum
 
 	static final int DEFAULT_WIDTH = 120;
 	static final int DEFAULT_HEIGHT = 100;
@@ -125,9 +126,11 @@ public class Micropolis
 	int nuclearCount;
 	int seaportCount;
 	int airportCount;
+	int museumCount;
 
 	int totalPop;
 	int lastCityPop;
+	int lastMuseumCount;
 
 	// used in generateBudget()
 	int lastRoadTotal;
@@ -177,6 +180,7 @@ public class Micropolis
 	int roadEffect = 32;
 	int policeEffect = 1000;
 	int fireEffect = 1000;
+	int museumEffect = 1000;
 
 	int cashFlow; //net change in totalFunds in previous year
 
@@ -228,6 +232,7 @@ public class Micropolis
 
 		landValueMem = new int[hY][hX];
 		pollutionMem = new int[hY][hX];
+		museumMap = new int[hY][hX];
 		crimeMem = new int[hY][hX];
 		popDensity = new int[hY][hX];
 		trfDensity = new int[hY][hX];
@@ -532,6 +537,7 @@ public class Micropolis
 		hospitalCount = 0;
 		churchCount = 0;
 		policeCount = 0;
+		museumCount = 0; //add museum count
 		fireStationCount = 0;
 		stadiumCount = 0;
 		coalCount = 0;
@@ -544,6 +550,7 @@ public class Micropolis
 			for (int x = 0; x < fireStMap[y].length; x++) {
 				fireStMap[y][x] = 0;
 				policeMap[y][x] = 0;
+				museumMap[y][x] = 0; //add museum map
 			}
 		}
 	}
@@ -635,7 +642,7 @@ public class Micropolis
 			break;
 
 		case 12:
-			ptlScan();
+			ptmlScan();
 			break;
 
 		case 13:
@@ -650,11 +657,19 @@ public class Micropolis
 			fireAnalysis();
 			doDisasters();
 			break;
-
+			
+		case 16:
+			museumScan();
+			break;
+			
+		
 		default:
 			throw new Error("unreachable");
 		}
 	}
+
+
+	
 
 	private int computePopDen(int x, int y, char tile)
 	{
@@ -856,6 +871,7 @@ public class Micropolis
 					int z = 128 - val + popDensity[hy][hx];
 					z = Math.min(300, z);
 					z -= policeMap[hy/4][hx/4];
+					z -= museumMap[hy/4][hx/4]; // bug fix, copy from policemap
 					z = Math.min(250, z);
 					z = Math.max(0, z);
 					crimeMem[hy][hx] = z;
@@ -1123,6 +1139,20 @@ public class Micropolis
 			return 0;
 		}
 	}
+	
+	// education impact here
+	public int getEducationImpact(int xpos, int ypos) {
+		if(testBounds(xpos,ypos)) {
+			return museumMap[ypos/2][xpos/2];
+		}
+		else {
+			return 0;
+		}
+	
+	}
+	
+	
+	
 
 	public int getTrafficDensity(int xpos, int ypos)
 	{
@@ -1133,8 +1163,14 @@ public class Micropolis
 		}
 	}
 
-	//power, terrain, land value
-	void ptlScan()
+	
+	
+	void museumScan() {
+		
+	}
+
+	//power, terrain,museum, land value
+	void ptmlScan()
 	{
 		final int qX = (getWidth()+3)/4;
 		final int qY = (getHeight()+3)/4;
@@ -1146,12 +1182,14 @@ public class Micropolis
 		final int HWLDX = (getWidth()+1)/2;
 		final int HWLDY = (getHeight()+1)/2;
 		int [][] tem = new int[HWLDY][HWLDX];
+		int [][] etem = new int[HWLDY][HWLDX];  //
 		for (int x = 0; x < HWLDX; x++)
 		{
 			for (int y = 0; y < HWLDY; y++)
 			{
 				int plevel = 0;
 				int lvflag = 0;
+				int elevel = 0; // education level from museum
 				int zx = 2*x;
 				int zy = 2*y;
 
@@ -1171,6 +1209,11 @@ public class Micropolis
 							plevel += getPollutionValue(tile);
 							if (isConstructed(tile))
 								lvflag++;
+							
+							if(tile == MUSEUM) {
+								System.out.println(" looked for a museum.");
+								elevel += 64;
+							}
 						}
 					}
 				}
@@ -1180,8 +1223,15 @@ public class Micropolis
 
 				if (plevel > 255)
 					plevel = 255;
+				
+				if (elevel <0)
+					elevel = 0;
+				
+				if (elevel >255)
+				    elevel = 255;
 
 				tem[y][x] = plevel;
+				etem[y][x] = plevel;  //bug fix
 
 				if (lvflag != 0)
 				{
@@ -1192,6 +1242,7 @@ public class Micropolis
 					dis *= 4;
 					dis += terrainMem[y/2][x/2];
 					dis -= pollutionMem[y][x];
+					dis += museumMap[y][x]/5*2; // 
 					if (crimeMem[y][x] > 190) {
 						dis -= 20;
 					}
@@ -1214,6 +1265,11 @@ public class Micropolis
 
 		tem = doSmooth(tem);
 		tem = doSmooth(tem);
+		etem = doSmooth(etem);
+		etem = doSmooth(etem);
+		etem = doSmooth(etem);
+		etem = doSmooth(etem);
+		etem = doSmooth(etem); // make some distance
 
 		int pcount = 0;
 		int ptotal = 0;
@@ -1224,6 +1280,9 @@ public class Micropolis
 			{
 				int z = tem[y][x];
 				pollutionMem[y][x] = z;
+				
+				int w = etem[y][x];
+				museumMap[y][x] = w*3;
 
 				if (z != 0)
 				{
@@ -1247,6 +1306,8 @@ public class Micropolis
 
 		fireMapOverlayDataChanged(MapState.POLLUTE_OVERLAY);   //PLMAP
 		fireMapOverlayDataChanged(MapState.LANDVALUE_OVERLAY); //LVMAP
+		fireMapOverlayDataChanged(MapState.MUSEUM_EDUCATION_OVERLAY); 
+		
 	}
 
 	public CityLocation getLocationOfMaxPollution()
@@ -2487,6 +2548,22 @@ public class Micropolis
 	{
 		sprites.add(new ExplosionSprite(this, x, y));
 	}
+	
+	//check museum
+	void checkMuseum() {
+		if(cityTime % 2 == 0) {
+			MicropolisMessage z = null;
+		    if (museumCount - lastMuseumCount == 1) {
+		    	z = MicropolisMessage.NEW_MUSEUM; // bug to fix
+		    }
+		    if (z != null) {
+		    	sendMessage(z);
+		    }
+		    lastMuseumCount = museumCount;
+	}
+}
+	
+	
 
 	void checkGrowth()
 	{
@@ -2518,6 +2595,7 @@ public class Micropolis
 		//MORE (scenario stuff)
 
 		checkGrowth();
+		checkMuseum();
 
 		int totalZoneCount = resZoneCount + comZoneCount + indZoneCount;
 		int powerCount = nuclearCount + coalCount;
@@ -2625,6 +2703,13 @@ public class Micropolis
 				sendMessage(MicropolisMessage.HIGH_TRAFFIC);
 			}
 			break;
+			
+		case 64:	
+			if (museumCount > 0) {
+				sendMessage(MicropolisMessage.NEW_MUSEUM);
+			}
+			break;
+			
 		default:
 			//nothing
 		}
@@ -2663,6 +2748,10 @@ public class Micropolis
 
 		z = ((crimeMem[ypos/2][xpos/2] / 64) % 4) + 8;
 		zs.crimeLevel = z + 1;
+		
+		z = ((museumMap[ypos/2][xpos/2]/64)%4)*10;
+		System.out.println("z: "+z);
+		zs.educationCoverage = z + 1;
 
 		z = Math.max(13,((pollutionMem[ypos/2][xpos/2] / 64) % 4) + 12);
 		zs.pollution = z + 1;
