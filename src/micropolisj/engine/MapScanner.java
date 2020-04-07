@@ -208,6 +208,7 @@ class MapScanner extends TileBehavior
 
 		city.powerPlants.add(new CityLocation(xpos, ypos));
 	}
+	
 
 	void doFireStation()
 	{
@@ -257,12 +258,27 @@ class MapScanner extends TileBehavior
 
 		city.policeMap[ypos/8][xpos/8] += z;
 	}
+	// 
+	void museumPopGrowth() {
+	    double rpop = city.resPop * 1.1;
+	    city.resPop = (int)Math.ceil(rpop);
+	    double cpop = city.comPop * 1.2;
+	    city.comPop = (int)Math.ceil(cpop);
+	    double ipop = city.indPop * 1.3;
+	    city.indPop = (int)Math.ceil(ipop);
+	}
 	
 	void doMuseum() //check for power and do repair
 	{
 	  boolean powerOn = checkZonePower();
+	  
+	  city.museumCount++; // bug to fix
+	  
 	  if ((city.cityTime % 8) == 0) {
 		  repairZone(MUSEUM,3);
+	  }
+	  if(powerOn) {
+		  museumPopGrowth();
 	  }
 		
 	}
