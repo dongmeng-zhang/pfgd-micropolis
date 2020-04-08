@@ -63,8 +63,9 @@ public enum MicropolisMessage
 	NO_NUCLEAR_PLANTS,
 	
 	// add museum
-	NEW_MUSEUM,
-	NEED_MUSEUM;
+
+	NEED_MUSEUM, 
+	MUSEUM_NEED_FUNDING; // make some massage for later use
 	
 
 	/** Whether the message should be displayed in the notification pane. */

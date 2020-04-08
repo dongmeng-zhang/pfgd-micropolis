@@ -258,7 +258,7 @@ class MapScanner extends TileBehavior
 
 		city.policeMap[ypos/8][xpos/8] += z;
 	}
-	// 
+	// museum help pop growth
 	void museumPopGrowth() {
 	    double rpop = city.resPop * 1.1;
 	    city.resPop = (int)Math.ceil(rpop);
@@ -271,14 +271,21 @@ class MapScanner extends TileBehavior
 	void doMuseum() //check for power and do repair
 	{
 	  boolean powerOn = checkZonePower();
-	  
-	
-	  
+	  city.museumCount++;
+  
 	  if ((city.cityTime % 8) == 0) {
 		  repairZone(MUSEUM,3);
 	  }
 	  if(powerOn) {
 		  museumPopGrowth();
+	  }
+	  
+	  int z;  // power effect museum
+	  if(powerOn) {
+		  z = city.museumEffect;
+	  }
+	  else {
+		  z= city.museumEffect/4;
 	  }
 		
 	}
