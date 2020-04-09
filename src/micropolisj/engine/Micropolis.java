@@ -90,7 +90,7 @@ public class Micropolis
 	/** For each 8x8 section of city, this is an integer between 0 and 64,
 	 * with higher numbers being closer to the center of the city. */
 	int [][] comRate;
-	public int [][]museumMap;  // add museum
+	public int [][]museumMap;  // add museum map
 
 	static final int DEFAULT_WIDTH = 120;
 	static final int DEFAULT_HEIGHT = 100;
@@ -120,13 +120,14 @@ public class Micropolis
 	int hospitalCount;
 	int churchCount;
 	int policeCount;
+	int museumCount;
 	int fireStationCount;
 	int stadiumCount;
 	int coalCount;
 	int nuclearCount;
 	int seaportCount;
 	int airportCount;
-	int museumCount;
+	
 
 	int totalPop;
 	int lastCityPop;
@@ -874,7 +875,7 @@ public class Micropolis
 					int z = 128 - val + popDensity[hy][hx];
 					z = Math.min(300, z);
 					z -= policeMap[hy/4][hx/4];
-					z -= museumMap[hy/4][hx/4]; // bug fix, copy from policemap
+					z -= museumMap[hy/4][hx/4]; // bug fix, copy from policemap, reduce crime rate
 					z = Math.min(250, z);
 					z = Math.max(0, z);
 					crimeMem[hy][hx] = z;
@@ -1234,7 +1235,7 @@ public class Micropolis
 				    elevel = 255;
 
 				tem[y][x] = plevel;
-				etem[y][x] = plevel;  //bug fix
+				etem[y][x] = elevel;  //bug fix
 
 				if (lvflag != 0)
 				{
@@ -1285,7 +1286,7 @@ public class Micropolis
 				pollutionMem[y][x] = z;
 				
 				int w = etem[y][x];
-				museumMap[y][x] = w*3;
+				museumMap[y][x] = w*6;
 
 				if (z != 0)
 				{
