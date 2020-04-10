@@ -1264,6 +1264,7 @@ public class Micropolis
 				}
 			}
 		}
+		
 
 		landValueAverage = landValueCount != 0 ? (landValueTotal/landValueCount) : 0;
 
