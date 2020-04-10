@@ -1246,7 +1246,7 @@ public class Micropolis
 					dis *= 4;
 					dis += terrainMem[y/2][x/2];
 					dis -= pollutionMem[y][x];
-					dis += museumMap[y][x]/5*2; // 
+					dis += museumMap[y][x]/3*2; // 
 					if (crimeMem[y][x] > 190) {
 						dis -= 20;
 					}
@@ -1273,7 +1273,7 @@ public class Micropolis
 		etem = doSmooth(etem);
 		etem = doSmooth(etem);
 		etem = doSmooth(etem);
-		etem = doSmooth(etem); // make some distance
+		etem = doSmooth(etem); // make some radiates
 
 		int pcount = 0;
 		int ptotal = 0;
